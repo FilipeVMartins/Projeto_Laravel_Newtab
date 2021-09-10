@@ -18,8 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::get('/tasks, [TaskController::class, 'index']);
-// Route::get('/tasks/:id', [TaskController::class, 'show']);
-// Route::post('/tasks, [TaskController::class, 'create']);
-// Route::put('/tasks/:id', [TaskController::class, 'update']);
-// Route::delete('/tasks/:id', [TaskController::class, 'destroy']);
+// Route::get('/Pessoas, [PessoasController::class, 'index']);
+// Route::get('/Pessoas/:id', [PessoasController::class, 'show']);
+// Route::post('/Pessoas, [PessoasController::class, 'create']);
+// Route::put('/Pessoas/:id', [PessoasController::class, 'update']);
+// Route::delete('/Pessoas/:id', [PessoasController::class, 'destroy']);

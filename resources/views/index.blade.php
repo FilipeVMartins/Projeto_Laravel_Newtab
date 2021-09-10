@@ -6,14 +6,11 @@
 
         <title>Projeto Laravel Newtab Academy</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
-
     </head>
     <body>
-        <div>teste</div>
-        
-    
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js')}}"></script>
     </body>
 </html>
