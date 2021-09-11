@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Vaga extends Model
 {
     use HasFactory;
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'empresa',
+        'titulo',
+        'descricao',
+        'localizacao',
+        'nivel',
+    ];
 }
