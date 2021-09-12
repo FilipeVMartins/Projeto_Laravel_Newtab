@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API_Vagas;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Vaga;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class VagasController extends Controller
 {
@@ -14,7 +17,8 @@ class VagasController extends Controller
      */
     public function index()
     {
-        //
+        $data= Vaga::latest()->paginate(10);
+        return response()->json($data);
     }
 
     /**
@@ -35,7 +39,23 @@ class VagasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'empresa' => ['required', 'max:100'],
+            'titulo' => ['required', 'max:100'],
+            'descricao' => ['required', 'max:65435'],
+            'localizacao' => ['required', 'size:1', Rule::in(['A', 'B', 'C', 'D', 'E', 'F'])],
+            'nivel' => ['required', 'size:1', Rule::in(['1', '2', '3', '4', '5'])],
+        ]);
+
+        if ($validator->fails()) {
+            $response = ['errors' => $validator->errors()->getMessages()];
+            return response()->json($response);
+        }
+
+        $Vaga = Vaga::create($request->all());
+        
+        //return the vaga model if success
+        return $Vaga;
     }
 
     /**
@@ -67,9 +87,25 @@ class VagasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'empresa' => ['required', 'max:100'],
+            'titulo' => ['required', 'max:100'],
+            'descricao' => ['required', 'max:65435'],
+            'localizacao' => ['required', 'size:1', Rule::in(['A', 'B', 'C', 'D', 'E', 'F'])],
+            'nivel' => ['required', 'size:1', Rule::in(['1', '2', '3', '4', '5'])],
+        ]);
+
+        if ($validator->fails()) {
+            $response = ['errors' => $validator->errors()->getMessages()];
+            return response()->json($response);
+        }
+
+        $update = Vaga::where('id', $request->id)->update($request->all());
+
+        //return 0 for fail or 1 for success
+        return $update;
     }
 
     /**
@@ -78,8 +114,11 @@ class VagasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        //
+        $delete = Vaga::destroy($request->id);
+        
+        //return 0 for fail or 1 for success
+        return $delete;
     }
 }

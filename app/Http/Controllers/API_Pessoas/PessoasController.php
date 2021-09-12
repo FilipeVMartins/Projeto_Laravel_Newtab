@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API_Pessoas;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Pessoa;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PessoasController extends Controller
 {
@@ -14,7 +17,8 @@ class PessoasController extends Controller
      */
     public function index()
     {
-        //
+        $data= Pessoa::latest()->paginate(10);
+        return response()->json($data);
     }
 
     /**
@@ -35,7 +39,22 @@ class PessoasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nome' => ['required', 'unique:pessoas', 'max:100'],
+            'profissao' => ['required', 'max:100'],
+            'localizacao' => ['required', 'size:1', Rule::in(['A', 'B', 'C', 'D', 'E', 'F'])],
+            'nivel' => ['required', 'size:1', Rule::in(['1', '2', '3', '4', '5'])],
+        ]);
+
+        if ($validator->fails()) {
+            $response = ['errors' => $validator->errors()->getMessages()];
+            return response()->json($response);
+        }
+
+        $Pessoa = Pessoa::create($request->all());
+        
+        //return the pessoa model if success
+        return $Pessoa;
     }
 
     /**
@@ -67,9 +86,24 @@ class PessoasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nome' => ['required', 'unique:pessoas', 'max:100'],
+            'profissao' => ['required', 'max:100'],
+            'localizacao' => ['required', 'size:1', Rule::in(['A', 'B', 'C', 'D', 'E', 'F'])],
+            'nivel' => ['required', 'size:1', Rule::in(['1', '2', '3', '4', '5'])],
+        ]);
+
+        if ($validator->fails()) {
+            $response = ['errors' => $validator->errors()->getMessages()];
+            return response()->json($response);
+        }
+
+        $update = Pessoa::where('id', $request->id)->update($request->all());
+
+        //return 0 for fail or 1 for success
+        return $update;
     }
 
     /**
@@ -78,8 +112,11 @@ class PessoasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        //
+        $delete = Pessoa::destroy($request->id);
+        
+        //return 0 for fail or 1 for success
+        return $delete;
     }
 }

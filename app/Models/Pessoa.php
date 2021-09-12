@@ -20,4 +20,9 @@ class Pessoa extends Model
         'localizacao',
         'nivel',
     ];
+
+    protected $hidden = [
+        'updated_at',
+        'created_at',
+    ];
 }
