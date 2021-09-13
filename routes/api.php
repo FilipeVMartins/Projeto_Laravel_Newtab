@@ -39,11 +39,21 @@ Route::namespace('App\Http\Controllers\API_Vagas')->group(function(){
 });
 
 Route::namespace('App\Http\Controllers\API_Candidaturas')->group(function(){
+    Route::prefix('Candidaturas')->group(function () {
 
-    Route::get('/Candidaturas',  'CandidaturasController@index')->name('api.index_candidaturas');
-    Route::get('/Candidaturas/{id}', 'CandidaturasController@show')->name('api.show_candidaturas');
-    Route::post('/Candidaturas', 'CandidaturasController@store')->name('api.store_candidaturas');
-    Route::put('/Candidaturas', 'CandidaturasController@update')->name('api.update_candidaturas');
-    Route::delete('/Candidaturas', 'CandidaturasController@delete')->name('api.delete_candidaturas');
+        Route::get('/',  'CandidaturasController@index')->name('api.index_candidaturas');
+        Route::get('/{id}', 'CandidaturasController@show')->name('api.show_candidaturas');
+        Route::post('/', 'CandidaturasController@store')->name('api.store_candidaturas');
+        Route::put('/', 'CandidaturasController@update')->name('api.update_candidaturas');
+        Route::delete('/', 'CandidaturasController@delete')->name('api.delete_candidaturas');
 
+    });
 });
+
+
+//Route::prefix('Ranking')->group(function () {
+
+Route::get('/vagas/{id}/candidaturas/ranking', [App\Http\Controllers\API_Ranking\RankingController::class, 'index'])->name('api.index_vagas_candidaturas_ranking');
+
+//});
+
