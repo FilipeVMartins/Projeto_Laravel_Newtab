@@ -89,8 +89,8 @@ class CandidaturasController extends Controller
     {
         $validator = Validator::make($request->all(), [
             //unique composite key validation
-            'id_vaga' => ['required', 'integer', 'unique:candidaturas,id_vaga,NULL,id,id_pessoa,' . $request->id_pessoa],
-            'id_pessoa' => ['required', 'integer', 'unique:candidaturas,id_pessoa,NULL,id,id_vaga,' . $request->id_vaga],
+            'id_vaga' => ['required', 'integer', 'unique:candidaturas,id_vaga,'.$request->id.',id,id_pessoa,' . $request->id_pessoa],
+            'id_pessoa' => ['required', 'integer', 'unique:candidaturas,id_pessoa,'.$request->id.',id,id_vaga,' . $request->id_vaga],
         ]);
 
         if ($validator->fails()) {

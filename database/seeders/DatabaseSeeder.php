@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
             
-        \App\Models\Pessoa::factory()->count(50)->create();
+        \App\Models\Pessoa::factory()->count(100)->create();
         \App\Models\Vaga::factory()->count(50)->create();
-        \App\Models\Candidatura::factory()->count(120)->create();
+        \App\Models\Candidatura::factory()->count(400)->create();
         
 
         

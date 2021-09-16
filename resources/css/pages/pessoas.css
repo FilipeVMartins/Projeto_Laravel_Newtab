@@ -1,6 +1,43 @@
+
+.home-content{
+    margin-bottom: 400px;
+}
+
+.page-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .pessoas-pagination {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.page-link.active {
+    background-color: #d3d3d3;
+}
+
+.form-pessoas {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    margin-left: 20px;
+}
+
+.form-pessoas form {
+    width: 100%;
+}
+
+.action-buttons button {
+    margin: 2px;
+}
+
+html body .home-content button:hover {
+    border: 1px solid black;
 }

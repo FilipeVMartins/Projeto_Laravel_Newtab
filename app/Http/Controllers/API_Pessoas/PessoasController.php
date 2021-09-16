@@ -89,7 +89,7 @@ class PessoasController extends Controller
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nome' => ['required', 'unique:pessoas', 'max:100'],
+            'nome' => ['required', 'unique:pessoas,nome,'.$request->id, 'max:100'],
             'profissao' => ['required', 'max:100'],
             'localizacao' => ['required', 'size:1', Rule::in(['A', 'B', 'C', 'D', 'E', 'F'])],
             'nivel' => ['required', 'size:1', Rule::in(['1', '2', '3', '4', '5'])],
