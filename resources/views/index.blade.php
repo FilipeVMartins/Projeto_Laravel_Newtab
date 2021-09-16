@@ -6,11 +6,18 @@
 
         <title>Projeto Laravel Newtab Academy</title>
 
+        
+
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
         <!-- Scripts -->
         <script src="{{ asset('js/app.js')}}"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href={{ asset('css/bootstrap.min.css') }}>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+
     </body>
 </html>

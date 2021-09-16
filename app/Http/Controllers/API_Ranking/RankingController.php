@@ -15,7 +15,7 @@ class RankingController extends Controller
      */
     public function index($id)
     {
-        $data = Candidatura::where('id_vaga', $id)->orderBy('score')->get();
+        $data = Candidatura::where('id_vaga', $id)->orderByDesc('score')->get();
         return response()->json($data);
     }
 
