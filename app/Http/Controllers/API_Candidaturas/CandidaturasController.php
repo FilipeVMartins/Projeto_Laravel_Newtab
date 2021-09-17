@@ -17,7 +17,7 @@ class CandidaturasController extends Controller
      */
     public function index()
     {
-        $data = Candidatura::latest()->paginate(20);
+        $data = Candidatura::with('vaga')->with('pessoa')->latest()->paginate(20);
         return response()->json($data);
     }
 

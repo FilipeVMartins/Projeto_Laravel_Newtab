@@ -1,0 +1,9 @@
+div.action-buttons {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+}
+
+.action-buttons button {
+    margin: 2px;
+}

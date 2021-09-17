@@ -14,7 +14,6 @@ export default class Pessoas extends React.Component {
     formState: 0
   }
 
-  
 
 
   // function to fetch pessoas data after page load
@@ -123,7 +122,7 @@ export default class Pessoas extends React.Component {
     //change form to edit
     this.setState({formState: 1});
 
-    let pessoaTR = e.target.parentNode.parentNode;
+    let pessoaTR = e.target.parentNode.parentNode.parentNode;
 
     // convert data from table row to json
     let pessoaTRjson = {
@@ -241,9 +240,11 @@ export default class Pessoas extends React.Component {
                     <td>{pessoa.profissao}</td>
                     <td>{pessoa.localizacao}</td>
                     <td>{pessoa.nivel}</td>
-                    <td className="action-buttons">
-                      <button className="btn btn-warning" title="Editar Pessoa" onClick={ e => this.editPessoa(e)}>✏️</button>
-                      <button className="btn btn-danger" value={pessoa.id} title="Excluir Pessoa" onClick={ e => this.deletePessoa(e)}>❌</button>
+                    <td>
+                      <div className="action-buttons">
+                        <button className="btn btn-warning" title="Editar Pessoa" onClick={ e => this.editPessoa(e)}>✏️</button>
+                        <button className="btn btn-danger" value={pessoa.id} title="Excluir Pessoa" onClick={ e => this.deletePessoa(e)}>❌</button>
+                      </div>
                     </td>
                   </tr>
                 );

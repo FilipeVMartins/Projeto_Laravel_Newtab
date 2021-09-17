@@ -3,20 +3,20 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
+import ModalRankingCandidaturas from '../components/ModalRankingCandidaturas';
+
 //styles
 import '../../css/pages/vagas.css';
 
 export default class Vagas extends React.Component {
 
-  
-  
-
   state = {
     vagas: null,
     actualPage: 1,
-    formState: 0
+    formState: 0,
+    openModalRankingCandidaturas: false,
+    vagaID: null
   }
-
 
 
 
@@ -126,7 +126,7 @@ export default class Vagas extends React.Component {
     //change form to edit
     this.setState({formState: 1});
 
-    let vagaTR = e.target.parentNode.parentNode;
+    let vagaTR = e.target.parentNode.parentNode.parentNode;
 
     // convert data from table row to json
     let vagaTRjson = {
@@ -155,6 +155,16 @@ export default class Vagas extends React.Component {
     //change form to edit
     this.setState({formState: 0});
   }
+
+  openModalRankingCandidaturas = (e) => {
+    e.preventDefault();
+    this.setState({openModalRankingCandidaturas: !this.state.openModalRankingCandidaturas});
+  };
+
+  setModalRankingVagaID = (e, vagaID) => {
+    e.preventDefault();
+    this.setState({vagaID: vagaID});
+  };
 
 
 
@@ -238,6 +248,7 @@ export default class Vagas extends React.Component {
                   <th scope="col">Descrição</th>
                   <th scope="col">Localizacao</th>
                   <th scope="col">Nível</th>
+                  <th scope="col">Candidaturas</th>
                   <th scope="col">Ações</th>
                 </tr>
               </thead>
@@ -252,9 +263,13 @@ export default class Vagas extends React.Component {
                     <td>{vaga.descricao}</td>
                     <td>{vaga.localizacao}</td>
                     <td>{vaga.nivel}</td>
-                    <td className="action-buttons">
-                      <button className="btn btn-warning" title="Editar Vaga" onClick={ e => this.editVaga(e)}>✏️</button>
-                      <button className="btn btn-danger" value={vaga.id} title="Excluir Vaga" onClick={ e => this.deleteVaga(e)}>❌</button>
+                    <td>{vaga.qtd_candidaturas}</td>
+                    <td>
+                      <div className="action-buttons">
+                        <button className="btn btn-info" title="Ver Ranking" onClick={ e => {this.openModalRankingCandidaturas(e); this.setModalRankingVagaID(e, vaga.id)}}>&#8605;</button>
+                        <button className="btn btn-warning" title="Editar Vaga" onClick={ e => this.editVaga(e)}>✏️</button>
+                        <button className="btn btn-danger" value={vaga.id} title="Excluir Vaga" onClick={ e => this.deleteVaga(e)}>❌</button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -277,6 +292,8 @@ export default class Vagas extends React.Component {
         
         ) : null}
         </div>
+
+        <ModalRankingCandidaturas openModalRankingCandidaturasState={this.state.openModalRankingCandidaturas} openModalRankingCandidaturasFunction={this.openModalRankingCandidaturas} vagaID={this.state.vagaID}></ModalRankingCandidaturas>
       </div>
     );
   };

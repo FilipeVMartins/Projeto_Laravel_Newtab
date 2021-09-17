@@ -18,9 +18,10 @@ class Candidatura extends Model
         'id_vaga',
         'id_pessoa',
     ];
-    // protected $hidden = [
-    //     'user',
-    // ];
+    protected $hidden = [
+        'updated_at',
+        'created_at',
+    ];
 
     //campos calculados
     // protected $appends = ['score'];

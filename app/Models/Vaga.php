@@ -25,4 +25,18 @@ class Vaga extends Model
         'created_at',
         'updated_at',
     ];
+    protected $appends = [
+        'qtd_candidaturas'
+    ];
+
+    public function getQtdCandidaturasAttribute()
+    {
+        return Candidatura::where('id_vaga', $this->id)->count();
+    }
+
+    // //relacionamentos
+    // public function candidatura()
+    // {
+    //     return $this->oneToMany(Vaga::class, 'id_vaga');
+    // }
 }

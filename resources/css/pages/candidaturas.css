@@ -1,0 +1,50 @@
+
+.candidaturas-content{
+}
+
+.page-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.candidaturas-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-link.active {
+    background-color: #d3d3d3;
+}
+
+.form-candidaturas {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    margin-left: 20px;
+}
+
+.form-candidaturas form {
+    width: 100%;
+}
+
+.action-buttons button {
+    margin: 2px;
+}
+
+html body .candidaturas-content button:hover {
+    border: 1px solid black;
+}
+
+.candidaturas-list table tbody tr td:nth-child(5){
+    border-right: 1px solid #d3d3d3;
+}
+
+.candidaturas-list table tbody tr td:nth-child(9){
+    border-right: 1px solid #d3d3d3;
+}

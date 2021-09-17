@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             
         \App\Models\Pessoa::factory()->count(100)->create();
         \App\Models\Vaga::factory()->count(50)->create();
-        \App\Models\Candidatura::factory()->count(400)->create();
+        \App\Models\Candidatura::factory()->count(500)->create();
         
 
         
