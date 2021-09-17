@@ -1,5 +1,5 @@
 
-.home-content{
+.pessoas-content{
     margin-bottom: 400px;
 }
 
@@ -38,6 +38,6 @@
     margin: 2px;
 }
 
-html body .home-content button:hover {
+html body .pessoas-content button:hover {
     border: 1px solid black;
 }

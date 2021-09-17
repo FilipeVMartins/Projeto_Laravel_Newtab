@@ -14,7 +14,7 @@ export default class Pessoas extends React.Component {
     formState: 0
   }
 
-
+  
 
 
   // function to fetch pessoas data after page load
@@ -142,13 +142,6 @@ export default class Pessoas extends React.Component {
     form.querySelector("#profissao").value = pessoaTRjson.profissao;
     form.querySelector("#localizacao").value = pessoaTRjson.localizacao;
     form.querySelector("#nivel").value = pessoaTRjson.nivel;
-
-
-
-    console.log(form.querySelector("#id"));
-    console.log(pessoaTRjson.id);
-
-
   }
 
   editCancel = (e) => {
@@ -169,13 +162,11 @@ export default class Pessoas extends React.Component {
   render() {
 
     return (
-      <div className="home-content">
+      <div className="pessoas-content">
         <div className="page-title">
           <h2>Gerenciar Pessoas</h2>
         </div>
 
-
-        
         <div className="form-pessoas">
           <form onSubmit={(e) => this.postPessoas(e)}>
             
@@ -191,7 +182,7 @@ export default class Pessoas extends React.Component {
 
             <div>
               <label htmlFor="profissao">Profissão: </label>
-              <input className="form-control" type="profissao" id="profissao" name="profissao" maxLength="100" />
+              <input className="form-control" type="text" id="profissao" name="profissao" maxLength="100" />
             </div>
 
             <div>
@@ -225,9 +216,6 @@ export default class Pessoas extends React.Component {
             </div>
           </form>
         </div>
-
-
-
 
         <div>
         {this.state.pessoas !== null && (typeof this.state.pessoas.data !== 'undefined') ? (
