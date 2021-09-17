@@ -2335,6 +2335,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 function ModalRankingCandidaturas(props) {
+  var _this = this;
+
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
       rankingResult = _useState2[0],
@@ -2375,9 +2377,9 @@ function ModalRankingCandidaturas(props) {
           children: "X"
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        children: rankingResult !== null && rankingResult.data.length !== 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        children: rankingResult !== null && rankingResult.data.length !== 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "candidaturas-list",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
             className: "table",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("thead", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
@@ -2445,9 +2447,30 @@ function ModalRankingCandidaturas(props) {
                 }, 'candidatura' + index);
               })
             })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "candidaturas-pagination",
+            children: rankingResult.links.length > 3 ? Object.entries(rankingResult.links).map(function (_ref3) {
+              var _ref4 = _slicedToArray(_ref3, 2),
+                  index = _ref4[0],
+                  link = _ref4[1];
+
+              if (index != 0 && index != rankingResult.links.length - 1) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                  className: "page-link " + (link.label == _this.state.actualPage ? 'active' : null),
+                  id: 'link' + index,
+                  href: link.url,
+                  onClick: function onClick(e) {
+                    return _this.getCandidaturas(e, link.url);
+                  },
+                  children: link.label
+                }, 'link' + index);
+              }
+            }) : null
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+            children: "N\xE3o foram encontradas Candidaturas para esta Vaga!"
           })
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
-          children: "N\xE3o foram encontradas Candidaturas para esta Vaga!"
         })
       })]
     })]
@@ -3070,7 +3093,7 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "candidaturas-pagination",
-              children: Object.entries(this.state.candidaturas.links).map(function (_ref11) {
+              children: this.state.candidaturas.links.length > 3 ? Object.entries(this.state.candidaturas.links).map(function (_ref11) {
                 var _ref12 = _slicedToArray(_ref11, 2),
                     index = _ref12[0],
                     link = _ref12[1];
@@ -3086,9 +3109,13 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
                     children: link.label
                   }, 'link' + index);
                 }
-              })
+              }) : null
             })]
-          }) : null
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+              children: "N\xE3o foram encontradas Candidaturas cadastradas do Sistema!"
+            })
+          })
         })]
       });
     }
@@ -3664,7 +3691,7 @@ var Pessoas = /*#__PURE__*/function (_React$Component) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "pessoas-pagination",
-              children: Object.entries(this.state.pessoas.links).map(function (_ref11) {
+              children: this.state.pessoas.links.length > 3 ? Object.entries(this.state.pessoas.links).map(function (_ref11) {
                 var _ref12 = _slicedToArray(_ref11, 2),
                     index = _ref12[0],
                     link = _ref12[1];
@@ -3680,9 +3707,13 @@ var Pessoas = /*#__PURE__*/function (_React$Component) {
                     children: link.label
                   }, 'link' + index);
                 }
-              })
+              }) : null
             })]
-          }) : null
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+              children: "N\xE3o foram encontradas Pessoas cadastradas do Sistema!"
+            })
+          })
         })]
       });
     }
@@ -4217,7 +4248,7 @@ var Vagas = /*#__PURE__*/function (_React$Component) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "vagas-pagination",
-              children: Object.entries(this.state.vagas.links).map(function (_ref11) {
+              children: this.state.vagas.links.length > 3 ? Object.entries(this.state.vagas.links).map(function (_ref11) {
                 var _ref12 = _slicedToArray(_ref11, 2),
                     index = _ref12[0],
                     link = _ref12[1];
@@ -4233,9 +4264,13 @@ var Vagas = /*#__PURE__*/function (_React$Component) {
                     children: link.label
                   }, 'link' + index);
                 }
-              })
+              }) : null
             })]
-          }) : null
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
+              children: "N\xE3o foram encontradas Vagas cadastradas do Sistema!"
+            })
+          })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_ModalRankingCandidaturas__WEBPACK_IMPORTED_MODULE_3__["default"], {
           openModalRankingCandidaturasState: this.state.openModalRankingCandidaturas,
           openModalRankingCandidaturasFunction: this.openModalRankingCandidaturas,

@@ -40,17 +40,6 @@ export default function ModalRankingCandidaturas (props) {
                     <span>X</span>
                 </div>
                 
-                    
-
-
-
-
-
-
-
-
-
-
                 <div>
                     {rankingResult !== null && (rankingResult.data.length !== 0) ? (
                     <div className="candidaturas-list">
@@ -92,38 +81,23 @@ export default function ModalRankingCandidaturas (props) {
                         }
                         </tbody>
                         </table>
-                        {/* <div className="candidaturas-pagination">
+                        <div className="candidaturas-pagination">
                             {
-                            Object.entries(rankingResult.links).map(([index, link]) => {
-                                if (index != 0 && index != (rankingResult.links.length-1)){
-                                return (
-                                    <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getCandidaturas(e, link.url)} >{link.label}</a>
-                                );
-                                }
-                            })
+                            (rankingResult.links.length > 3) ?
+                                Object.entries(rankingResult.links).map(([index, link]) => {
+                                    if (index != 0 && index != (rankingResult.links.length-1)){
+                                    return (
+                                        <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getCandidaturas(e, link.url)} >{link.label}</a>
+                                    );
+                                    }
+                                })
+                            : null
                             }
-                        </div> */}
+                        </div>
                     </div>
                     
-                    ) : (<i>Não foram encontradas Candidaturas para esta Vaga!</i>)}
+                    ) : (<span><i>Não foram encontradas Candidaturas para esta Vaga!</i></span>)}
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             </div>
             

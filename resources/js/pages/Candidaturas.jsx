@@ -274,18 +274,21 @@ export default class Candidaturas extends React.Component {
             </table>
             <div className="candidaturas-pagination">
               {
-              Object.entries(this.state.candidaturas.links).map(([index, link]) => {
-                if (index != 0 && index != (this.state.candidaturas.links.length-1)){
-                  return (
-                    <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getCandidaturas(e, link.url)} >{link.label}</a>
-                  );
-                }
-              })
+              (this.state.candidaturas.links.length > 3) ?
+                Object.entries(this.state.candidaturas.links).map(([index, link]) => {
+                  if (index != 0 && index != (this.state.candidaturas.links.length-1)){
+                    return (
+                      <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getCandidaturas(e, link.url)} >{link.label}</a>
+                    );
+                  }
+                })
+              : null
               }
             </div>
           </div>
         
-        ) : null}
+        ) : (<span><i>Não foram encontradas Candidaturas cadastradas do Sistema!</i></span>)
+        }
         </div>
       </div>
     );

@@ -279,18 +279,21 @@ export default class Vagas extends React.Component {
             </table>
             <div className="vagas-pagination">
               {
-              Object.entries(this.state.vagas.links).map(([index, link]) => {
-                if (index != 0 && index != (this.state.vagas.links.length-1)){
-                  return (
-                    <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getVagas(e, link.url)} >{link.label}</a>
-                  );
-                }
-              })
+              (this.state.vagas.links.length > 3) ?
+                Object.entries(this.state.vagas.links).map(([index, link]) => {
+                  if (index != 0 && index != (this.state.vagas.links.length-1)){
+                    return (
+                      <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getVagas(e, link.url)} >{link.label}</a>
+                    );
+                  }
+                })
+              : null
               }
             </div>
           </div>
         
-        ) : null}
+        ) : (<span><i>Não foram encontradas Vagas cadastradas do Sistema!</i></span>)
+        }
         </div>
 
         <ModalRankingCandidaturas openModalRankingCandidaturasState={this.state.openModalRankingCandidaturas} openModalRankingCandidaturasFunction={this.openModalRankingCandidaturas} vagaID={this.state.vagaID}></ModalRankingCandidaturas>

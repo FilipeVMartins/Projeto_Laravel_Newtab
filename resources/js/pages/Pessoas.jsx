@@ -254,18 +254,21 @@ export default class Pessoas extends React.Component {
             </table>
             <div className="pessoas-pagination">
               {
-              Object.entries(this.state.pessoas.links).map(([index, link]) => {
-                if (index != 0 && index != (this.state.pessoas.links.length-1)){
-                  return (
-                    <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getPessoas(e, link.url)} >{link.label}</a>
-                  );
-                }
-              })
+              (this.state.pessoas.links.length > 3) ?
+                Object.entries(this.state.pessoas.links).map(([index, link]) => {
+                  if (index != 0 && index != (this.state.pessoas.links.length-1)){
+                    return (
+                      <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getPessoas(e, link.url)} >{link.label}</a>
+                    );
+                  }
+                })
+              : null
               }
             </div>
           </div>
         
-        ) : null}
+        ) : (<span><i>Não foram encontradas Pessoas cadastradas do Sistema!</i></span>)
+        }
         </div>
       </div>
     );
