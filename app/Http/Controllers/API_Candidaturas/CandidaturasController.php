@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API_Candidaturas;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Candidatura;
+use App\Models\Pessoa;
+use App\Models\Vaga;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -19,6 +21,36 @@ class CandidaturasController extends Controller
     {
         $data = Candidatura::with('vaga')->with('pessoa')->latest()->paginate(20);
         return response()->json($data);
+    }
+
+    public function indexFuzzySelectPessoaOptions(Request $request)
+    {
+        $nome = $request->nome;
+        if ($nome && strlen($nome) > 1){
+            $data = Pessoa::latest()
+                ->when($nome, function ($query, $nome) {
+                    return $query->where('nome', 'LIKE', "%$nome%");
+                })
+                ->get();
+            return response()->json($data);
+        } else {
+            return response()->json(['error' => 'Digite um valor']);
+        }
+    }
+
+    public function indexFuzzySelectVagaOptions(Request $request)
+    {
+        $titulo = $request->titulo;
+        if ($titulo && strlen($titulo) > 1){
+            $data = Vaga::latest()
+                ->when($titulo, function ($query, $titulo) {
+                    return $query->where('titulo', 'LIKE', "%$titulo%");
+                })
+                ->get();
+            return response()->json($data);
+        } else {
+            return response()->json(['error' => 'Digite um valor']);
+        }
     }
 
     /**

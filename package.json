@@ -25,7 +25,9 @@
         "sass-loader": "^11.0.1"
     },
     "dependencies": {
+        "fuse.js": "^6.4.6",
         "react-router-dom": "^5.3.0",
+        "react-select-search": "^3.0.8",
         "react-toastify": "^8.0.2"
     }
 }

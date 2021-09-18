@@ -43,6 +43,19 @@ export default function ModalRankingCandidaturas (props) {
                 <div>
                     {rankingResult !== null && (rankingResult.data.length !== 0) ? (
                     <div className="candidaturas-list">
+                        <div className="candidaturas-pagination">
+                            {
+                            (rankingResult.links.length > 3) ?
+                                Object.entries(rankingResult.links).map(([index, link]) => {
+                                    if (index != 0 && index != (rankingResult.links.length-1)){
+                                    return (
+                                        <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getCandidaturas(e, link.url)} >{link.label}</a>
+                                    );
+                                    }
+                                })
+                            : null
+                            }
+                        </div>
                         <table className="table">
                         <thead>
                             <tr>

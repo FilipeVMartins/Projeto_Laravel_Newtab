@@ -239,6 +239,19 @@ export default class Vagas extends React.Component {
         <div>
         {this.state.vagas !== null && (typeof this.state.vagas.data !== 'undefined') ? (
           <div className="vagas-list">
+            <div className="vagas-pagination">
+              {
+              (this.state.vagas.links.length > 3) ?
+                Object.entries(this.state.vagas.links).map(([index, link]) => {
+                  if (index != 0 && index != (this.state.vagas.links.length-1)){
+                    return (
+                      <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getVagas(e, link.url)} >{link.label}</a>
+                    );
+                  }
+                })
+              : null
+              }
+            </div>
             <table className="table">
               <thead>
                 <tr>

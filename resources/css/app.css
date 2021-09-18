@@ -7,3 +7,17 @@ div.action-buttons {
 .action-buttons button {
     margin: 2px;
 }
+
+.table {
+    margin-top: 10px;
+}
+
+.table thead tr th {
+    text-align: center;
+    vertical-align: top;
+
+    background-color: #f3f3f3;
+    
+
+    border: 1px solid #d3d3d3;
+}

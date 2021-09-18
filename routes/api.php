@@ -42,6 +42,8 @@ Route::namespace('App\Http\Controllers\API_Candidaturas')->group(function(){
     Route::prefix('Candidaturas')->group(function () {
 
         Route::get('/',  'CandidaturasController@index')->name('api.index_candidaturas');
+        Route::get('/SelectPessoaOptions',  'CandidaturasController@indexFuzzySelectPessoaOptions')->name('api.index_candidaturas_selectPessoa');
+        Route::get('/SelectVagaOptions',  'CandidaturasController@indexFuzzySelectVagaOptions')->name('api.index_candidaturas_selectVaga');
         Route::get('/{id}', 'CandidaturasController@show')->name('api.show_candidaturas');
         Route::post('/', 'CandidaturasController@store')->name('api.store_candidaturas');
         Route::put('/', 'CandidaturasController@update')->name('api.update_candidaturas');

@@ -219,6 +219,19 @@ export default class Pessoas extends React.Component {
         <div>
         {this.state.pessoas !== null && (typeof this.state.pessoas.data !== 'undefined') ? (
           <div className="pessoas-list">
+            <div className="pessoas-pagination">
+              {
+              (this.state.pessoas.links.length > 3) ?
+                Object.entries(this.state.pessoas.links).map(([index, link]) => {
+                  if (index != 0 && index != (this.state.pessoas.links.length-1)){
+                    return (
+                      <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getPessoas(e, link.url)} >{link.label}</a>
+                    );
+                  }
+                })
+              : null
+              }
+            </div>
             <table className="table">
               <thead>
                 <tr>

@@ -2379,7 +2379,26 @@ function ModalRankingCandidaturas(props) {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         children: rankingResult !== null && rankingResult.data.length !== 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "candidaturas-list",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "candidaturas-pagination",
+            children: rankingResult.links.length > 3 ? Object.entries(rankingResult.links).map(function (_ref) {
+              var _ref2 = _slicedToArray(_ref, 2),
+                  index = _ref2[0],
+                  link = _ref2[1];
+
+              if (index != 0 && index != rankingResult.links.length - 1) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                  className: "page-link " + (link.label == _this.state.actualPage ? 'active' : null),
+                  id: 'link' + index,
+                  href: link.url,
+                  onClick: function onClick(e) {
+                    return _this.getCandidaturas(e, link.url);
+                  },
+                  children: link.label
+                }, 'link' + index);
+              }
+            }) : null
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
             className: "table",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("thead", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
@@ -2416,10 +2435,10 @@ function ModalRankingCandidaturas(props) {
                 })]
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("tbody", {
-              children: Object.entries(rankingResult.data).map(function (_ref) {
-                var _ref2 = _slicedToArray(_ref, 2),
-                    index = _ref2[0],
-                    candidatura = _ref2[1];
+              children: Object.entries(rankingResult.data).map(function (_ref3) {
+                var _ref4 = _slicedToArray(_ref3, 2),
+                    index = _ref4[0],
+                    candidatura = _ref4[1];
 
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
@@ -2449,10 +2468,10 @@ function ModalRankingCandidaturas(props) {
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "candidaturas-pagination",
-            children: rankingResult.links.length > 3 ? Object.entries(rankingResult.links).map(function (_ref3) {
-              var _ref4 = _slicedToArray(_ref3, 2),
-                  index = _ref4[0],
-                  link = _ref4[1];
+            children: rankingResult.links.length > 3 ? Object.entries(rankingResult.links).map(function (_ref5) {
+              var _ref6 = _slicedToArray(_ref5, 2),
+                  index = _ref6[0],
+                  link = _ref6[1];
 
               if (index != 0 && index != rankingResult.links.length - 1) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
@@ -2646,7 +2665,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
- //styles
+ // import SelectSearch from 'react-select-search';
+// import Fuse from 'fuse.js';
+//styles
 
 
 
@@ -2671,7 +2692,11 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "state", {
       candidaturas: null,
       actualPage: 1,
-      formState: 0
+      formState: 0,
+      selectCandidato: [],
+      selectedCandidatoData: null,
+      selectVaga: [],
+      selectedVagaData: null
     });
 
     _defineProperty(_assertThisInitialized(_this), "getCandidaturas", function () {
@@ -2831,12 +2856,107 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
       });
     });
 
+    _defineProperty(_assertThisInitialized(_this), "searchCandidatoNome", function (e) {
+      if (e.target.value.length > 1) {
+        var nome = encodeURI(e.target.value);
+        var url = 'http://localhost:8001/api/Candidaturas/SelectPessoaOptions?nome=' + nome;
+        var requestOptions = {
+          method: 'GET'
+        };
+        fetch(url, requestOptions).then(function (response) {
+          return response.json();
+        }).then(function (result) {
+          _this.setState({
+            selectCandidato: result
+          });
+        })["catch"](function (error) {
+          return console.log('erro ao buscar candidatos: ', error);
+        });
+      }
+
+      ;
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "searchVagaTitulo", function (e) {
+      console.log(e.target.value);
+
+      if (e.target.value.length > 1) {
+        var titulo = encodeURI(e.target.value);
+        var url = 'http://localhost:8001/api/Candidaturas/SelectVagaOptions?titulo=' + titulo;
+        var requestOptions = {
+          method: 'GET'
+        };
+        fetch(url, requestOptions).then(function (response) {
+          return response.json();
+        }).then(function (result) {
+          _this.setState({
+            selectVaga: result
+          });
+        })["catch"](function (error) {
+          return console.log('erro ao buscar candidatos: ', error);
+        });
+      }
+
+      ;
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "getSelectedCandidatoData", function (e) {
+      var candidato = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      _this.setState({
+        selectedCandidatoData: candidato
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "getSelectedVagaData", function (e) {
+      var titulo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      _this.setState({
+        selectedVagaData: titulo
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "setSelectedCandidato", function (e) {
+      var SelectedCandidato = _this.state.selectedCandidatoData; //populate the form
+
+      var form = document.querySelector('form .pessoa-inputs-wrapper');
+
+      if (SelectedCandidato == null) {
+        form.querySelector("#nome").value = '';
+      } else {
+        form.querySelector("#id_pessoa").value = SelectedCandidato.id;
+        form.querySelector("#nome").value = SelectedCandidato.nome;
+        form.querySelector("#profissao").value = SelectedCandidato.profissao;
+        form.querySelector("#localizacao").value = SelectedCandidato.localizacao;
+        form.querySelector("#nivel").value = SelectedCandidato.nivel;
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "setSelectedVaga", function (e) {
+      var selectedVagaData = _this.state.selectedVagaData;
+      console.log(selectedVagaData); //populate the form
+
+      var form = document.querySelector('form .vaga-inputs-wrapper');
+
+      if (selectedVagaData == null) {
+        form.querySelector("#titulo").value = '';
+      } else {
+        form.querySelector("#id_vaga").value = selectedVagaData.id;
+        form.querySelector("#empresa").value = selectedVagaData.empresa;
+        form.querySelector("#titulo").value = selectedVagaData.titulo;
+        form.querySelector("#descricao").value = selectedVagaData.descricao;
+        form.querySelector("#localizacao").value = selectedVagaData.localizacao;
+        form.querySelector("#nivel").value = selectedVagaData.nivel;
+      }
+    });
+
     return _this;
   }
 
   _createClass(Candidaturas, [{
     key: "componentDidMount",
-    value: function () {
+    value: //handleClick = (e) => { e.preventDefault(); console.log('The link was clicked.'); };
+    function () {
       var _componentDidMount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
@@ -2883,97 +3003,286 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
                 children: "Candidatura ID: "
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
                 readOnly: true,
+                disabled: true,
                 type: "text",
                 className: "form-control",
                 id: "id",
                 name: "id"
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-                htmlFor: "empresa",
-                children: "Empresa: "
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                className: "form-control",
-                type: "text",
-                id: "empresa",
-                name: "empresa",
-                maxLength: "100"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-                htmlFor: "titulo",
-                children: "T\xEDtulo: "
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                className: "form-control",
-                type: "text",
-                id: "titulo",
-                name: "titulo",
-                maxLength: "100"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-                htmlFor: "descricao",
-                children: "Descri\xE7\xE3o: "
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
-                className: "form-control",
-                type: "text",
-                id: "descricao",
-                name: "descricao",
-                maxLength: "65000"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-                htmlFor: "localizacao",
-                children: "Localiza\xE7\xE3o: "
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("select", {
-                className: "form-control",
-                name: "localizacao",
-                id: "localizacao",
-                maxLength: "1",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "A",
-                  children: "A"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "B",
-                  children: "B"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "C",
-                  children: "C"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "D",
-                  children: "D"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "E",
-                  children: "E"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "F",
-                  children: "F"
+              className: "inputs-wrapper",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "vaga-inputs-wrapper",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "id_vaga",
+                    children: "ID Vaga: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    readOnly: true,
+                    className: "form-control",
+                    type: "text",
+                    id: "id_vaga",
+                    name: "id_vaga"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "empresa",
+                    children: "Empresa: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    readOnly: true,
+                    disabled: true,
+                    className: "form-control",
+                    type: "text",
+                    id: "empresa",
+                    name: "empresa",
+                    maxLength: "100"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  className: "dropdown",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "titulo",
+                    children: "T\xEDtulo da Vaga: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                    id: "myDropdown",
+                    className: "dropdown-content",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                      autoComplete: "off",
+                      type: "text",
+                      placeholder: "Digite para pesquisar!",
+                      className: "form-control",
+                      id: "titulo",
+                      name: "titulo",
+                      maxLength: "100",
+                      onBlur: function onBlur(e) {
+                        return _this2.setSelectedVaga(e);
+                      },
+                      onChange: function onChange(e) {
+                        return _this2.searchVagaTitulo(e);
+                      }
+                    }, 'titulo'), this.state.selectVaga.length != 0 ? Object.entries(this.state.selectVaga).map(function (_ref9) {
+                      var _ref10 = _slicedToArray(_ref9, 2),
+                          index = _ref10[0],
+                          vaga = _ref10[1];
+
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+                        href: "#null",
+                        id: "selectpessoa" + index,
+                        name: "selectpessoa" + index,
+                        onMouseOver: function onMouseOver(e) {
+                          return _this2.getSelectedVagaData(e, vaga);
+                        },
+                        onMouseOut: function onMouseOut(e) {
+                          return _this2.getSelectedVagaData(e, vaga);
+                        },
+                        children: vaga.titulo
+                      }, "selectpessoa" + index);
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+                      href: "#null",
+                      children: "Nenhum resultado encontrado!"
+                    })]
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "descricao",
+                    children: "Descri\xE7\xE3o: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+                    readOnly: true,
+                    disabled: true,
+                    className: "form-control",
+                    type: "text",
+                    id: "descricao",
+                    name: "descricao",
+                    maxLength: "65000"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "localizacao",
+                    children: "Localiza\xE7\xE3o: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("select", {
+                    readOnly: true,
+                    disabled: true,
+                    className: "form-control",
+                    name: "localizacao",
+                    id: "localizacao",
+                    maxLength: "1",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "A",
+                      children: "A"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "B",
+                      children: "B"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "C",
+                      children: "C"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "D",
+                      children: "D"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "E",
+                      children: "E"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "F",
+                      children: "F"
+                    })]
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "nivel",
+                    children: "N\xEDvel"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("select", {
+                    readOnly: true,
+                    disabled: true,
+                    className: "form-control",
+                    name: "nivel",
+                    id: "nivel",
+                    maxLength: "1",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "1",
+                      children: "1"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "2",
+                      children: "2"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "3",
+                      children: "3"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "4",
+                      children: "4"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "5",
+                      children: "5"
+                    })]
+                  })]
                 })]
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-                htmlFor: "nivel",
-                children: "N\xEDvel"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("select", {
-                className: "form-control",
-                name: "nivel",
-                id: "nivel",
-                maxLength: "1",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "1",
-                  children: "1"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "2",
-                  children: "2"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "3",
-                  children: "3"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "4",
-                  children: "4"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                  value: "5",
-                  children: "5"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "pessoa-inputs-wrapper",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "id_pessoa",
+                    children: "ID Pessoa: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    readOnly: true,
+                    className: "form-control",
+                    type: "text",
+                    id: "id_pessoa",
+                    name: "id_pessoa"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  className: "dropdown",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "nome",
+                    children: "Nome do Candidato: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                    id: "myDropdown",
+                    className: "dropdown-content",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                      autoComplete: "off",
+                      type: "text",
+                      placeholder: "Digite para pesquisar!",
+                      className: "form-control",
+                      id: "nome",
+                      name: "nome",
+                      maxLength: "100",
+                      onBlur: function onBlur(e) {
+                        return _this2.setSelectedCandidato(e);
+                      },
+                      onChange: function onChange(e) {
+                        return _this2.searchCandidatoNome(e);
+                      }
+                    }, 'nome'), this.state.selectCandidato.length != 0 ? Object.entries(this.state.selectCandidato).map(function (_ref11) {
+                      var _ref12 = _slicedToArray(_ref11, 2),
+                          index = _ref12[0],
+                          candidato = _ref12[1];
+
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+                        href: "#null",
+                        id: "selectpessoa" + index,
+                        name: "selectpessoa" + index,
+                        onMouseOver: function onMouseOver(e) {
+                          return _this2.getSelectedCandidatoData(e, candidato);
+                        },
+                        onMouseOut: function onMouseOut(e) {
+                          return _this2.getSelectedCandidatoData(e, candidato);
+                        },
+                        children: candidato.nome
+                      }, "selectpessoa" + index);
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+                      href: "#null",
+                      children: "Nenhum resultado encontrado!"
+                    })]
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "profissao",
+                    children: "Profiss\xE3o: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    readOnly: true,
+                    disabled: true,
+                    className: "form-control",
+                    type: "text",
+                    id: "profissao",
+                    name: "profissao",
+                    maxLength: "100"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "localizacao",
+                    children: "Localiza\xE7\xE3o: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("select", {
+                    readOnly: true,
+                    disabled: true,
+                    className: "form-control",
+                    name: "localizacao",
+                    id: "localizacao",
+                    maxLength: "1",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "A",
+                      children: "A"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "B",
+                      children: "B"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "C",
+                      children: "C"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "D",
+                      children: "D"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "E",
+                      children: "E"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "F",
+                      children: "F"
+                    })]
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "nivel",
+                    children: "N\xEDvel"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("select", {
+                    readOnly: true,
+                    disabled: true,
+                    className: "form-control",
+                    name: "nivel",
+                    id: "nivel",
+                    maxLength: "1",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "1",
+                      children: "1"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "2",
+                      children: "2"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "3",
+                      children: "3"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "4",
+                      children: "4"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                      value: "5",
+                      children: "5"
+                    })]
+                  })]
                 })]
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -3000,19 +3309,38 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           children: this.state.candidaturas !== null && typeof this.state.candidaturas.data !== 'undefined' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "candidaturas-list",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "candidaturas-pagination",
+              children: this.state.candidaturas.links.length > 3 ? Object.entries(this.state.candidaturas.links).map(function (_ref13) {
+                var _ref14 = _slicedToArray(_ref13, 2),
+                    index = _ref14[0],
+                    link = _ref14[1];
+
+                if (index != 0 && index != _this2.state.candidaturas.links.length - 1) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+                    className: "page-link " + (link.label == _this2.state.actualPage ? 'active' : null),
+                    id: 'link' + index,
+                    href: link.url,
+                    onClick: function onClick(e) {
+                      return _this2.getCandidaturas(e, link.url);
+                    },
+                    children: link.label
+                  }, 'link' + index);
+                }
+              }) : null
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
               className: "table",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                     scope: "col",
-                    children: "ID"
+                    children: "Candidatura ID"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                     scope: "col",
                     children: "Empresa"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                     scope: "col",
-                    children: "T\xEDtulo"
+                    children: "T\xEDtulo da Vaga"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                     scope: "col",
                     children: "Localizacao"
@@ -3021,7 +3349,7 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
                     children: "N\xEDvel"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                     scope: "col",
-                    children: "Candidato"
+                    children: "Nome do Candidato"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                     scope: "col",
                     children: "Profiss\xE3o"
@@ -3040,10 +3368,10 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
                   })]
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
-                children: Object.entries(this.state.candidaturas.data).map(function (_ref9) {
-                  var _ref10 = _slicedToArray(_ref9, 2),
-                      index = _ref10[0],
-                      candidatura = _ref10[1];
+                children: Object.entries(this.state.candidaturas.data).map(function (_ref15) {
+                  var _ref16 = _slicedToArray(_ref15, 2),
+                      index = _ref16[0],
+                      candidatura = _ref16[1];
 
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
@@ -3093,10 +3421,10 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "candidaturas-pagination",
-              children: this.state.candidaturas.links.length > 3 ? Object.entries(this.state.candidaturas.links).map(function (_ref11) {
-                var _ref12 = _slicedToArray(_ref11, 2),
-                    index = _ref12[0],
-                    link = _ref12[1];
+              children: this.state.candidaturas.links.length > 3 ? Object.entries(this.state.candidaturas.links).map(function (_ref17) {
+                var _ref18 = _slicedToArray(_ref17, 2),
+                    index = _ref18[0],
+                    link = _ref18[1];
 
                 if (index != 0 && index != _this2.state.candidaturas.links.length - 1) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
@@ -3623,7 +3951,26 @@ var Pessoas = /*#__PURE__*/function (_React$Component) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           children: this.state.pessoas !== null && typeof this.state.pessoas.data !== 'undefined' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "pessoas-list",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "pessoas-pagination",
+              children: this.state.pessoas.links.length > 3 ? Object.entries(this.state.pessoas.links).map(function (_ref9) {
+                var _ref10 = _slicedToArray(_ref9, 2),
+                    index = _ref10[0],
+                    link = _ref10[1];
+
+                if (index != 0 && index != _this2.state.pessoas.links.length - 1) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+                    className: "page-link " + (link.label == _this2.state.actualPage ? 'active' : null),
+                    id: 'link' + index,
+                    href: link.url,
+                    onClick: function onClick(e) {
+                      return _this2.getPessoas(e, link.url);
+                    },
+                    children: link.label
+                  }, 'link' + index);
+                }
+              }) : null
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
               className: "table",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
@@ -3648,10 +3995,10 @@ var Pessoas = /*#__PURE__*/function (_React$Component) {
                   })]
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
-                children: Object.entries(this.state.pessoas.data).map(function (_ref9) {
-                  var _ref10 = _slicedToArray(_ref9, 2),
-                      index = _ref10[0],
-                      pessoa = _ref10[1];
+                children: Object.entries(this.state.pessoas.data).map(function (_ref11) {
+                  var _ref12 = _slicedToArray(_ref11, 2),
+                      index = _ref12[0],
+                      pessoa = _ref12[1];
 
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
@@ -3691,10 +4038,10 @@ var Pessoas = /*#__PURE__*/function (_React$Component) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "pessoas-pagination",
-              children: this.state.pessoas.links.length > 3 ? Object.entries(this.state.pessoas.links).map(function (_ref11) {
-                var _ref12 = _slicedToArray(_ref11, 2),
-                    index = _ref12[0],
-                    link = _ref12[1];
+              children: this.state.pessoas.links.length > 3 ? Object.entries(this.state.pessoas.links).map(function (_ref13) {
+                var _ref14 = _slicedToArray(_ref13, 2),
+                    index = _ref14[0],
+                    link = _ref14[1];
 
                 if (index != 0 && index != _this2.state.pessoas.links.length - 1) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
@@ -4161,7 +4508,26 @@ var Vagas = /*#__PURE__*/function (_React$Component) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           children: this.state.vagas !== null && typeof this.state.vagas.data !== 'undefined' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "vagas-list",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              className: "vagas-pagination",
+              children: this.state.vagas.links.length > 3 ? Object.entries(this.state.vagas.links).map(function (_ref9) {
+                var _ref10 = _slicedToArray(_ref9, 2),
+                    index = _ref10[0],
+                    link = _ref10[1];
+
+                if (index != 0 && index != _this2.state.vagas.links.length - 1) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
+                    className: "page-link " + (link.label == _this2.state.actualPage ? 'active' : null),
+                    id: 'link' + index,
+                    href: link.url,
+                    onClick: function onClick(e) {
+                      return _this2.getVagas(e, link.url);
+                    },
+                    children: link.label
+                  }, 'link' + index);
+                }
+              }) : null
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
               className: "table",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
@@ -4192,10 +4558,10 @@ var Vagas = /*#__PURE__*/function (_React$Component) {
                   })]
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
-                children: Object.entries(this.state.vagas.data).map(function (_ref9) {
-                  var _ref10 = _slicedToArray(_ref9, 2),
-                      index = _ref10[0],
-                      vaga = _ref10[1];
+                children: Object.entries(this.state.vagas.data).map(function (_ref11) {
+                  var _ref12 = _slicedToArray(_ref11, 2),
+                      index = _ref12[0],
+                      vaga = _ref12[1];
 
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
@@ -4248,10 +4614,10 @@ var Vagas = /*#__PURE__*/function (_React$Component) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "vagas-pagination",
-              children: this.state.vagas.links.length > 3 ? Object.entries(this.state.vagas.links).map(function (_ref11) {
-                var _ref12 = _slicedToArray(_ref11, 2),
-                    index = _ref12[0],
-                    link = _ref12[1];
+              children: this.state.vagas.links.length > 3 ? Object.entries(this.state.vagas.links).map(function (_ref13) {
+                var _ref14 = _slicedToArray(_ref13, 2),
+                    index = _ref14[0],
+                    link = _ref14[1];
 
                 if (index != 0 && index != _this2.state.vagas.links.length - 1) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
@@ -8825,7 +9191,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "div.action-buttons {\n    display: flex;\n    flex-direction: row;\n    width: auto;\n}\n\n.action-buttons button {\n    margin: 2px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "div.action-buttons {\n    display: flex;\n    flex-direction: row;\n    width: auto;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\n.table {\n    margin-top: 10px;\n}\n\n.table thead tr th {\n    text-align: center;\n    vertical-align: top;\n\n    background-color: #f3f3f3;\n    \n\n    border: 1px solid #d3d3d3;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8897,7 +9263,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.candidaturas-content{\n}\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.candidaturas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-candidaturas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: 400px;\n    margin-left: 20px;\n}\n\n.form-candidaturas form {\n    width: 100%;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .candidaturas-content button:hover {\n    border: 1px solid black;\n}\n\n.candidaturas-list table tbody tr td:nth-child(5){\n    border-right: 1px solid #d3d3d3;\n}\n\n.candidaturas-list table tbody tr td:nth-child(9){\n    border-right: 1px solid #d3d3d3;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.candidaturas-content{\n}\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.candidaturas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-candidaturas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: auto;\n    margin-left: 20px;\n}\n\n.form-candidaturas form {\n    width: 100%;\n}\n\n.form-candidaturas .inputs-wrapper {\n    width: 100%;\n}\n\n.form-candidaturas .vaga-inputs-wrapper {\n    width: 300px;\n    margin-right: 20px;\n}\n\n.form-candidaturas .pessoa-inputs-wrapper {\n    width: 300px;\n    margin-right: 20px;\n}\n\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .candidaturas-content button:hover {\n    border: 1px solid black;\n}\n\n.candidaturas-list table tbody tr td:nth-child(5){\n    border-right: 1px solid #d3d3d3;\n}\n\n.candidaturas-list table tbody tr td:nth-child(9){\n    border-right: 1px solid #d3d3d3;\n}\n\n.form-candidaturas .inputs-wrapper {\n    display: flex;\n    flex-direction: row;\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* The container <div> - needed to position the dropdown content */\n.dropdown {\n    position: relative;\n    display: inline-block;\n    min-height: 70px;\n}\n\n/* Dropdown Content (Hidden by Default) */\n.dropdown-content {\n    display: block;\n    position: absolute;\n    background-color: #f6f6f6;\n    width: 300px;\n    border: 1px solid #ddd;\n    z-index: 1;\n    max-height: 250px;\n    overflow: auto;\n    border-radius: .25rem;\n    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;\n}\n\n/* Links inside the dropdown */\n.dropdown-content a {\n    color: black;\n    padding: 12px 16px;\n    text-decoration: none;\n    z-index: 10;\n    display: none;\n}\n\n.dropdown-content input:focus ~ a {\n    display: block;\n}\n\n/* Change color of dropdown links on hover */\n.dropdown-content a:hover {\n    background-color: #d3d3d3\n}\n  \n  \n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

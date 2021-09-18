@@ -3,6 +3,9 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
+// import SelectSearch from 'react-select-search';
+// import Fuse from 'fuse.js';
+
 //styles
 import '../../css/pages/candidaturas.css';
 
@@ -11,8 +14,15 @@ export default class Candidaturas extends React.Component {
   state = {
     candidaturas: null,
     actualPage: 1,
-    formState: 0
+    formState: 0,
+    selectCandidato: [],
+    selectedCandidatoData: null,
+    selectVaga: [],
+    selectedVagaData: null
+    
   }
+
+  
 
 
 
@@ -154,13 +164,97 @@ export default class Candidaturas extends React.Component {
     this.setState({formState: 0});
   }
 
+  searchCandidatoNome = (e) => {
 
+     if (e.target.value.length > 1) {
+      const nome = encodeURI(e.target.value)
+      const url = 'http://localhost:8001/api/Candidaturas/SelectPessoaOptions?nome='+nome;
+
+      const requestOptions = {
+        method: 'GET',
+      };
+
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          this.setState({selectCandidato:result});
+        })
+        .catch(error => console.log('erro ao buscar candidatos: ', error));
+    };
+  }
+
+  searchVagaTitulo = (e) => {
+    console.log(e.target.value);
+
+     if (e.target.value.length > 1) {
+      const titulo = encodeURI(e.target.value)
+      const url = 'http://localhost:8001/api/Candidaturas/SelectVagaOptions?titulo='+titulo;
+
+      const requestOptions = {
+        method: 'GET',
+      };
+
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          this.setState({selectVaga:result});
+        })
+        .catch(error => console.log('erro ao buscar candidatos: ', error));
+    };
+  }
+
+  getSelectedCandidatoData = (e, candidato=null) => {
+    this.setState({selectedCandidatoData:candidato});
+  }
+
+  getSelectedVagaData = (e, titulo=null) => {
+    this.setState({selectedVagaData:titulo});
+  }
+
+  setSelectedCandidato = (e) => {
+    let SelectedCandidato = this.state.selectedCandidatoData;
+
+    //populate the form
+    let form = document.querySelector('form .pessoa-inputs-wrapper');
+
+    if (SelectedCandidato == null){
+      form.querySelector("#nome").value = '';
+    } else {
+      form.querySelector("#id_pessoa").value = SelectedCandidato.id;
+      form.querySelector("#nome").value = SelectedCandidato.nome;
+      form.querySelector("#profissao").value = SelectedCandidato.profissao;
+      form.querySelector("#localizacao").value = SelectedCandidato.localizacao;
+      form.querySelector("#nivel").value = SelectedCandidato.nivel;
+    }
+  }
+
+  setSelectedVaga = (e) => {
+    let selectedVagaData = this.state.selectedVagaData;
+    console.log(selectedVagaData)
+
+    //populate the form
+    let form = document.querySelector('form .vaga-inputs-wrapper');
+
+    if (selectedVagaData == null){
+      form.querySelector("#titulo").value = '';
+    } else {
+      form.querySelector("#id_vaga").value = selectedVagaData.id;
+      form.querySelector("#empresa").value = selectedVagaData.empresa;
+      form.querySelector("#titulo").value = selectedVagaData.titulo;
+      form.querySelector("#descricao").value = selectedVagaData.descricao;
+      form.querySelector("#localizacao").value = selectedVagaData.localizacao;
+      form.querySelector("#nivel").value = selectedVagaData.nivel;
+    }
+  }
+
+
+
+
+  //handleClick = (e) => { e.preventDefault(); console.log('The link was clicked.'); };
 
   async componentDidMount(){
     this.getCandidaturas();
   };
-
-
 
   render() {
 
@@ -175,46 +269,130 @@ export default class Candidaturas extends React.Component {
             
             <div hidden={ this.state.formState == 0 ? 'hidden' : '' }>
               <label htmlFor="id">Candidatura ID: </label>
-              <input readOnly type="text" className="form-control" id="id" name="id" />
+              <input readOnly disabled type="text" className="form-control" id="id" name="id" />
             </div>
 
-            <div>
-              <label htmlFor="empresa">Empresa: </label>
-              <input className="form-control" type="text" id="empresa" name="empresa" maxLength="100" />
+
+            <div className="inputs-wrapper">
+              <div className="vaga-inputs-wrapper">
+                <div>
+                  <label htmlFor="id_vaga">ID Vaga: </label>
+                  <input readOnly className="form-control" type="text" id="id_vaga" name="id_vaga"/>
+                </div>
+
+                <div>
+                  <label htmlFor="empresa">Empresa: </label>
+                  <input readOnly disabled className="form-control" type="text" id="empresa" name="empresa" maxLength="100" />
+                </div>
+
+                <div className="dropdown">
+                  <label htmlFor="titulo">Título da Vaga: </label>
+                  <div id="myDropdown" className="dropdown-content">
+                    <input autoComplete="off" type="text" placeholder="Digite para pesquisar!" className="form-control" key={'titulo'} id="titulo" name="titulo" maxLength="100" onBlur={e => this.setSelectedVaga(e)} onChange={ e => this.searchVagaTitulo(e)} />
+                    
+                    { this.state.selectVaga.length != 0 ?
+                    Object.entries(this.state.selectVaga).map(([index, vaga]) => {
+                      return (<a href="#null" key={"selectpessoa"+index} id={"selectpessoa"+index} name={"selectpessoa"+index} onMouseOver={e => this.getSelectedVagaData(e, vaga)}  onMouseOut={e => this.getSelectedVagaData(e, vaga)} >{vaga.titulo}</a>)
+                    })
+                    : (<a href="#null">Nenhum resultado encontrado!</a>)
+                    }
+                    
+                  </div>
+                </div>
+                
+
+                <div>
+                  <label htmlFor="descricao">Descrição: </label>
+                  <textarea readOnly disabled className="form-control" type="text" id="descricao" name="descricao" maxLength="65000" ></textarea>
+                </div>
+                
+                <div>
+                  <label htmlFor="localizacao">Localização: </label>
+                  <select readOnly disabled className="form-control" name="localizacao" id="localizacao" maxLength="1">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="nivel">Nível</label>
+                  <select readOnly disabled className="form-control" name="nivel" id="nivel" maxLength="1">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                  </select>
+                </div>
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+              <div className="pessoa-inputs-wrapper">
+                <div>
+                  <label htmlFor="id_pessoa">ID Pessoa: </label>
+                  <input readOnly className="form-control" type="text" id="id_pessoa" name="id_pessoa"></input>
+                </div>
+
+                <div className="dropdown">
+                  <label htmlFor="nome">Nome do Candidato: </label>
+                  <div id="myDropdown" className="dropdown-content">
+                    <input autoComplete="off" type="text" placeholder="Digite para pesquisar!" className="form-control" key={'nome'} id="nome" name="nome" maxLength="100" onBlur={e => this.setSelectedCandidato(e)} onChange={ e => this.searchCandidatoNome(e)} />
+                    
+                    { this.state.selectCandidato.length != 0 ?
+                    Object.entries(this.state.selectCandidato).map(([index, candidato]) => {
+                      return (<a href="#null" key={"selectpessoa"+index} id={"selectpessoa"+index} name={"selectpessoa"+index} onMouseOver={e => this.getSelectedCandidatoData(e, candidato)}  onMouseOut={e => this.getSelectedCandidatoData(e, candidato)} >{candidato.nome}</a>)
+                    })
+                    : (<a href="#null">Nenhum resultado encontrado!</a>)
+                    }
+                    
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="profissao">Profissão: </label>
+                  <input readOnly disabled className="form-control" type="text" id="profissao" name="profissao" maxLength="100" />
+                </div>
+
+                <div>
+                  <label htmlFor="localizacao">Localização: </label>
+                  <select readOnly disabled className="form-control" name="localizacao" id="localizacao" maxLength="1">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="nivel">Nível</label>
+                  <select readOnly disabled className="form-control" name="nivel" id="nivel" maxLength="1">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="titulo">Título: </label>
-              <input className="form-control" type="text" id="titulo" name="titulo" maxLength="100" />
-            </div>
-
-            <div>
-              <label htmlFor="descricao">Descrição: </label>
-              <textarea className="form-control" type="text" id="descricao" name="descricao" maxLength="65000" ></textarea>
-            </div>
-
-            <div>
-              <label htmlFor="localizacao">Localização: </label>
-              <select className="form-control" name="localizacao" id="localizacao" maxLength="1">
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="nivel">Nível</label>
-              <select className="form-control" name="nivel" id="nivel" maxLength="1">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-              </select>
-            </div>
 
             <div>
               <button hidden={ this.state.formState == 1 ? 'hidden' : '' } className="btn btn-primary" type="submit">Salvar Nova Candidatura</button>
@@ -227,16 +405,29 @@ export default class Candidaturas extends React.Component {
         <div>
         {this.state.candidaturas !== null && (typeof this.state.candidaturas.data !== 'undefined') ? (
           <div className="candidaturas-list">
+            <div className="candidaturas-pagination">
+              {
+              (this.state.candidaturas.links.length > 3) ?
+                Object.entries(this.state.candidaturas.links).map(([index, link]) => {
+                  if (index != 0 && index != (this.state.candidaturas.links.length-1)){
+                    return (
+                      <a className={"page-link " + (link.label == this.state.actualPage ? 'active' : null)} key={'link' + index} id={'link'+index} href={link.url} onClick={(e) => this.getCandidaturas(e, link.url)} >{link.label}</a>
+                    );
+                  }
+                })
+              : null
+              }
+            </div>
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
+                  <th scope="col">Candidatura ID</th>
                   <th scope="col">Empresa</th>
-                  <th scope="col">Título</th>
+                  <th scope="col">Título da Vaga</th>
                   <th scope="col">Localizacao</th>
                   <th scope="col">Nível</th>
 
-                  <th scope="col">Candidato</th>
+                  <th scope="col">Nome do Candidato</th>
                   <th scope="col">Profissão</th>
                   <th scope="col">Localizacao</th>
                   <th scope="col">Nível</th>
