@@ -40,13 +40,31 @@ export default class Candidaturas extends React.Component {
       .then(result => {
         this.setState({candidaturas:result});
         this.setState({actualPage:result.current_page});
-        console.log(result);
       })
       .catch(error => console.log('erro ao buscar candidaturas: ', error));
   }
 
 
+  getCandidaturaByID(id){
+    return new Promise((resolve, reject) => {
+      let requestOptions = {
+        method: 'GET',
+      };
   
+      fetch(`/api/Candidaturas/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          console.log('erro ao buscar candidaturas: ', error)
+          reject('erro ao buscar candidaturas: ' + error)
+        });
+
+    });
+  }
+  
+
   //function to create/update candidaturas
   postCandidaturas = (e=null, url = '/api/Candidaturas') => {
     if (e) e.preventDefault();
@@ -135,26 +153,49 @@ export default class Candidaturas extends React.Component {
     this.setState({formState: 1});
 
     let candidaturaTR = e.target.parentNode.parentNode.parentNode;
+    
+    // // convert data from table row to json
+    // let candidaturaTRjson = {
+    //   "id": candidaturaTR.querySelector(':scope > *:nth-child(1)').textContent,
+    //   "empresa": candidaturaTR.querySelector(':scope > *:nth-child(2)').textContent,
+    //   "titulo": candidaturaTR.querySelector(':scope > *:nth-child(3)').textContent,
+    //   "descricao": candidaturaTR.querySelector(':scope > *:nth-child(4)').textContent,
+    //   "localizacao": candidaturaTR.querySelector(':scope > *:nth-child(5)').textContent,
+    //   "nivel": candidaturaTR.querySelector(':scope > *:nth-child(6)').textContent
+    // }
 
-    // convert data from table row to json
-    let candidaturaTRjson = {
-      "id": candidaturaTR.querySelector(':scope > *:nth-child(1)').textContent,
-      "empresa": candidaturaTR.querySelector(':scope > *:nth-child(2)').textContent,
-      "titulo": candidaturaTR.querySelector(':scope > *:nth-child(3)').textContent,
-      "descricao": candidaturaTR.querySelector(':scope > *:nth-child(4)').textContent,
-      "localizacao": candidaturaTR.querySelector(':scope > *:nth-child(5)').textContent,
-      "nivel": candidaturaTR.querySelector(':scope > *:nth-child(6)').textContent
-    }
 
-    //populate the form
-    let form = document.querySelector('form');
+    const CandidaturaID = candidaturaTR.querySelector(':scope > *:nth-child(1)').textContent;
+    this.getCandidaturaByID(CandidaturaID)
+    .then(function(result) {
+      console.log(result.pessoa)
+      
+      //populate the form
+      let form = document.querySelector('form');
+      form.querySelector("#id").value = result.id;
+      form.querySelector("#id_vaga").value = result.id_vaga;
+      form.querySelector("#id_pessoa").value = result.id_pessoa;
 
-    form.querySelector("#id").value = candidaturaTRjson.id;
-    form.querySelector("#empresa").value = candidaturaTRjson.empresa;
-    form.querySelector("#titulo").value = candidaturaTRjson.titulo;
-    form.querySelector("#descricao").value = candidaturaTRjson.descricao;
-    form.querySelector("#localizacao").value = candidaturaTRjson.localizacao;
-    form.querySelector("#nivel").value = candidaturaTRjson.nivel;
+      form.querySelector("#empresa").value = result.vaga.empresa;
+      form.querySelector("#titulo").value = result.vaga.titulo;
+      form.querySelector("#descricao").value = result.vaga.descricao;
+      form.querySelector("#localizacao").value = result.vaga.localizacao;
+      form.querySelector("#nivel").value = result.vaga.nivel;
+
+      form = document.querySelector('form .pessoa-inputs-wrapper');
+      form.querySelector("#nome").value = result.pessoa.nome;
+      form.querySelector("#profissao").value = result.pessoa.profissao;
+      form.querySelector("#localizacao").value = result.pessoa.localizacao;
+      form.querySelector("#nivel").value = result.pessoa.nivel;
+
+    })
+    .catch((err) => {
+      console.log(err)
+    });
+
+
+
+    
   }
 
   editCancel = (e) => {
@@ -207,8 +248,8 @@ export default class Candidaturas extends React.Component {
     this.setState({selectedCandidatoData:candidato});
   }
 
-  getSelectedVagaData = (e, titulo=null) => {
-    this.setState({selectedVagaData:titulo});
+  getSelectedVagaData = (e, vaga=null) => {
+    this.setState({selectedVagaData:vaga});
   }
 
   setSelectedCandidato = (e) => {
@@ -218,7 +259,11 @@ export default class Candidaturas extends React.Component {
     let form = document.querySelector('form .pessoa-inputs-wrapper');
 
     if (SelectedCandidato == null){
+      form.querySelector("#id_pessoa").value = '';
       form.querySelector("#nome").value = '';
+      form.querySelector("#profissao").value = '';
+      form.querySelector("#localizacao").value = '';
+      form.querySelector("#nivel").value = '';
     } else {
       form.querySelector("#id_pessoa").value = SelectedCandidato.id;
       form.querySelector("#nome").value = SelectedCandidato.nome;
@@ -236,7 +281,12 @@ export default class Candidaturas extends React.Component {
     let form = document.querySelector('form .vaga-inputs-wrapper');
 
     if (selectedVagaData == null){
+      form.querySelector("#id_vaga").value = '';
+      form.querySelector("#empresa").value = '';
       form.querySelector("#titulo").value = '';
+      form.querySelector("#descricao").value = '';
+      form.querySelector("#localizacao").value = '';
+      form.querySelector("#nivel").value = '';
     } else {
       form.querySelector("#id_vaga").value = selectedVagaData.id;
       form.querySelector("#empresa").value = selectedVagaData.empresa;

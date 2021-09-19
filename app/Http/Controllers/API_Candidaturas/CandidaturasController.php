@@ -96,7 +96,8 @@ class CandidaturasController extends Controller
      */
     public function show($id)
     {
-        //
+        $candidatura = Candidatura::with('vaga')->with('pessoa')->findOrFail($id);
+        return response()->json($candidatura);
     }
 
     /**

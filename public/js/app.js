@@ -2720,8 +2720,6 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
         _this.setState({
           actualPage: result.current_page
         });
-
-        console.log(result);
       })["catch"](function (error) {
         return console.log('erro ao buscar candidaturas: ', error);
       });
@@ -2827,24 +2825,38 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
         formState: 1
       });
 
-      var candidaturaTR = e.target.parentNode.parentNode.parentNode; // convert data from table row to json
+      var candidaturaTR = e.target.parentNode.parentNode.parentNode; // // convert data from table row to json
+      // let candidaturaTRjson = {
+      //   "id": candidaturaTR.querySelector(':scope > *:nth-child(1)').textContent,
+      //   "empresa": candidaturaTR.querySelector(':scope > *:nth-child(2)').textContent,
+      //   "titulo": candidaturaTR.querySelector(':scope > *:nth-child(3)').textContent,
+      //   "descricao": candidaturaTR.querySelector(':scope > *:nth-child(4)').textContent,
+      //   "localizacao": candidaturaTR.querySelector(':scope > *:nth-child(5)').textContent,
+      //   "nivel": candidaturaTR.querySelector(':scope > *:nth-child(6)').textContent
+      // }
 
-      var candidaturaTRjson = {
-        "id": candidaturaTR.querySelector(':scope > *:nth-child(1)').textContent,
-        "empresa": candidaturaTR.querySelector(':scope > *:nth-child(2)').textContent,
-        "titulo": candidaturaTR.querySelector(':scope > *:nth-child(3)').textContent,
-        "descricao": candidaturaTR.querySelector(':scope > *:nth-child(4)').textContent,
-        "localizacao": candidaturaTR.querySelector(':scope > *:nth-child(5)').textContent,
-        "nivel": candidaturaTR.querySelector(':scope > *:nth-child(6)').textContent
-      }; //populate the form
+      var CandidaturaID = candidaturaTR.querySelector(':scope > *:nth-child(1)').textContent;
 
-      var form = document.querySelector('form');
-      form.querySelector("#id").value = candidaturaTRjson.id;
-      form.querySelector("#empresa").value = candidaturaTRjson.empresa;
-      form.querySelector("#titulo").value = candidaturaTRjson.titulo;
-      form.querySelector("#descricao").value = candidaturaTRjson.descricao;
-      form.querySelector("#localizacao").value = candidaturaTRjson.localizacao;
-      form.querySelector("#nivel").value = candidaturaTRjson.nivel;
+      _this.getCandidaturaByID(CandidaturaID).then(function (result) {
+        console.log(result.pessoa); //populate the form
+
+        var form = document.querySelector('form');
+        form.querySelector("#id").value = result.id;
+        form.querySelector("#id_vaga").value = result.id_vaga;
+        form.querySelector("#id_pessoa").value = result.id_pessoa;
+        form.querySelector("#empresa").value = result.vaga.empresa;
+        form.querySelector("#titulo").value = result.vaga.titulo;
+        form.querySelector("#descricao").value = result.vaga.descricao;
+        form.querySelector("#localizacao").value = result.vaga.localizacao;
+        form.querySelector("#nivel").value = result.vaga.nivel;
+        form = document.querySelector('form .pessoa-inputs-wrapper');
+        form.querySelector("#nome").value = result.pessoa.nome;
+        form.querySelector("#profissao").value = result.pessoa.profissao;
+        form.querySelector("#localizacao").value = result.pessoa.localizacao;
+        form.querySelector("#nivel").value = result.pessoa.nivel;
+      })["catch"](function (err) {
+        console.log(err);
+      });
     });
 
     _defineProperty(_assertThisInitialized(_this), "editCancel", function (e) {
@@ -2909,10 +2921,10 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "getSelectedVagaData", function (e) {
-      var titulo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var vaga = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
       _this.setState({
-        selectedVagaData: titulo
+        selectedVagaData: vaga
       });
     });
 
@@ -2922,7 +2934,11 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
       var form = document.querySelector('form .pessoa-inputs-wrapper');
 
       if (SelectedCandidato == null) {
+        form.querySelector("#id_pessoa").value = '';
         form.querySelector("#nome").value = '';
+        form.querySelector("#profissao").value = '';
+        form.querySelector("#localizacao").value = '';
+        form.querySelector("#nivel").value = '';
       } else {
         form.querySelector("#id_pessoa").value = SelectedCandidato.id;
         form.querySelector("#nome").value = SelectedCandidato.nome;
@@ -2939,7 +2955,12 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
       var form = document.querySelector('form .vaga-inputs-wrapper');
 
       if (selectedVagaData == null) {
+        form.querySelector("#id_vaga").value = '';
+        form.querySelector("#empresa").value = '';
         form.querySelector("#titulo").value = '';
+        form.querySelector("#descricao").value = '';
+        form.querySelector("#localizacao").value = '';
+        form.querySelector("#nivel").value = '';
       } else {
         form.querySelector("#id_vaga").value = selectedVagaData.id;
         form.querySelector("#empresa").value = selectedVagaData.empresa;
@@ -2954,6 +2975,24 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(Candidaturas, [{
+    key: "getCandidaturaByID",
+    value: function getCandidaturaByID(id) {
+      return new Promise(function (resolve, reject) {
+        var requestOptions = {
+          method: 'GET'
+        };
+        fetch("/api/Candidaturas/".concat(id), requestOptions).then(function (response) {
+          return response.json();
+        }).then(function (result) {
+          resolve(result);
+        })["catch"](function (error) {
+          console.log('erro ao buscar candidaturas: ', error);
+          reject('erro ao buscar candidaturas: ' + error);
+        });
+      });
+    } //function to create/update candidaturas
+
+  }, {
     key: "componentDidMount",
     value: //handleClick = (e) => { e.preventDefault(); console.log('The link was clicked.'); };
     function () {
@@ -9191,7 +9230,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "div.action-buttons {\n    display: flex;\n    flex-direction: row;\n    width: auto;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\n.table {\n    margin-top: 10px;\n}\n\n.table thead tr th {\n    text-align: center;\n    vertical-align: top;\n\n    background-color: #f3f3f3;\n    \n\n    border: 1px solid #d3d3d3;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "div.action-buttons {\n    display: flex;\n    flex-direction: row;\n    width: auto;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\n.table {\n    margin-top: 10px;\n}\n\n.table thead tr th {\n    text-align: center;\n    vertical-align: top;\n    background-color: #f3f3f3;\n    border: 1px solid #d3d3d3;\n}\n\n.table tbody tr:hover {\n    background-color: #f3f3f3;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9263,7 +9302,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.candidaturas-content{\n}\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.candidaturas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-candidaturas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: auto;\n    margin-left: 20px;\n}\n\n.form-candidaturas form {\n    width: 100%;\n}\n\n.form-candidaturas .inputs-wrapper {\n    width: 100%;\n}\n\n.form-candidaturas .vaga-inputs-wrapper {\n    width: 300px;\n    margin-right: 20px;\n}\n\n.form-candidaturas .pessoa-inputs-wrapper {\n    width: 300px;\n    margin-right: 20px;\n}\n\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .candidaturas-content button:hover {\n    border: 1px solid black;\n}\n\n.candidaturas-list table tbody tr td:nth-child(5){\n    border-right: 1px solid #d3d3d3;\n}\n\n.candidaturas-list table tbody tr td:nth-child(9){\n    border-right: 1px solid #d3d3d3;\n}\n\n.form-candidaturas .inputs-wrapper {\n    display: flex;\n    flex-direction: row;\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* The container <div> - needed to position the dropdown content */\n.dropdown {\n    position: relative;\n    display: inline-block;\n    min-height: 70px;\n}\n\n/* Dropdown Content (Hidden by Default) */\n.dropdown-content {\n    display: block;\n    position: absolute;\n    background-color: #f6f6f6;\n    width: 300px;\n    border: 1px solid #ddd;\n    z-index: 1;\n    max-height: 250px;\n    overflow: auto;\n    border-radius: .25rem;\n    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;\n}\n\n/* Links inside the dropdown */\n.dropdown-content a {\n    color: black;\n    padding: 12px 16px;\n    text-decoration: none;\n    z-index: 10;\n    display: none;\n}\n\n.dropdown-content input:focus ~ a {\n    display: block;\n}\n\n/* Change color of dropdown links on hover */\n.dropdown-content a:hover {\n    background-color: #d3d3d3\n}\n  \n  \n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/* \n.candidaturas-content{\n} */\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.candidaturas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-candidaturas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: auto;\n    margin-left: 20px;\n}\n\n.form-candidaturas form {\n    width: 100%;\n}\n\n.form-candidaturas .inputs-wrapper {\n    width: 100%;\n}\n\n.form-candidaturas .vaga-inputs-wrapper {\n    width: 300px;\n    margin-right: 20px;\n}\n\n.form-candidaturas .pessoa-inputs-wrapper {\n    width: 300px;\n    margin-right: 20px;\n}\n\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .candidaturas-content button:hover {\n    border: 1px solid black;\n}\n\n.candidaturas-list table tbody tr td:nth-child(5){\n    border-right: 1px solid #d3d3d3;\n}\n\n.candidaturas-list table tbody tr td:nth-child(9){\n    border-right: 1px solid #d3d3d3;\n}\n\n.form-candidaturas .inputs-wrapper {\n    display: flex;\n    flex-direction: row;\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* The container <div> - needed to position the dropdown content */\n.dropdown {\n    position: relative;\n    display: inline-block;\n    min-height: 70px;\n}\n\n/* Dropdown Content (Hidden by Default) */\n.dropdown-content {\n    display: block;\n    position: absolute;\n    background-color: #f6f6f6;\n    width: 300px;\n    border: 1px solid #ddd;\n    z-index: 1;\n    max-height: 250px;\n    overflow: auto;\n    border-radius: .25rem;\n    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;\n}\n\n/* Links inside the dropdown */\n.dropdown-content a {\n    color: black;\n    padding: 12px 16px;\n    text-decoration: none;\n    z-index: 10;\n    display: none;\n}\n\n.dropdown-content input:focus ~ a {\n    display: block;\n}\n\n/* Change color of dropdown links on hover */\n.dropdown-content a:hover {\n    background-color: #d3d3d3\n}\n  \n  \n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9311,7 +9350,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.pessoas-content{\n}\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.pessoas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-pessoas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: 400px;\n    margin-left: 20px;\n}\n\n.form-pessoas form {\n    width: 100%;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .pessoas-content button:hover {\n    border: 1px solid black;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n/* .pessoas-content{\n} */\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.pessoas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-pessoas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: 400px;\n    margin-left: 20px;\n}\n\n.form-pessoas form {\n    width: 100%;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .pessoas-content button:hover {\n    border: 1px solid black;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9335,7 +9374,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vagas-content{\n}\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.vagas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-vagas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: 400px;\n    margin-left: 20px;\n}\n\n.form-vagas form {\n    width: 100%;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .vagas-content button:hover {\n    border: 1px solid black;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n/* .vagas-content{\n} */\n\n.page-title {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.vagas-pagination {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n}\n\n.page-link.active {\n    background-color: #d3d3d3;\n}\n\n.form-vagas {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    width: 400px;\n    margin-left: 20px;\n}\n\n.form-vagas form {\n    width: 100%;\n}\n\n.action-buttons button {\n    margin: 2px;\n}\n\nhtml body .vagas-content button:hover {\n    border: 1px solid black;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

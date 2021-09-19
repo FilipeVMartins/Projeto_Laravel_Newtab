@@ -15,9 +15,10 @@ div.action-buttons {
 .table thead tr th {
     text-align: center;
     vertical-align: top;
-
     background-color: #f3f3f3;
-    
-
     border: 1px solid #d3d3d3;
+}
+
+.table tbody tr:hover {
+    background-color: #f3f3f3;
 }
