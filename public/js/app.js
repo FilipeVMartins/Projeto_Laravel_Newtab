@@ -2288,10 +2288,32 @@ function Example() {
           className: "card",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "card-header",
-            children: "Example Component"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            children: "Sobre o Projeto"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "card-body",
-            children: "I'm an example component!"
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+              children: "O projeto conta com 3 CRUD's:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("ul", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("li", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+                  children: "Pessoas: Tendo ID como PK, representa os candidatos \xE0 uma vaga."
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+                  children: "Vagas: Representa Vagas anunciadas por empresas e sua PK \xE9 o campo 'ID'. Logo, conclui-se que: 1- o campo 'titulo' n\xE3o representa uma informa\xE7\xE3o \xFAnica, pois podem haver diferentes vagas com o mesmo t\xEDtulo; 2- Uma mesma empresa pode ter v\xE1rias vagas, logo considera-se que o campo 'empresa' est\xE1 desnormalizado."
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+                  children: " O CRUD de Vagas tamb\xE9m conta com o campo calculado 'candidaturas' em seus retornos, que informa quantas pessoas se candidataram para uma vaga."
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+                  children: "Candidaturas: Foi utilizado um campo ID como chave prim\xE1ria para facilitar opera\xE7\xF5es, por\xE9m foi identificada a restri\xE7\xE3o de que duas candidaturas com a mesma vaga e pessoa seriam uma candidatura duplicada, tal chave composta n\xE3o foi declarada nas migrations, mas essa restri\xE7\xE3o foi adicionada nas valida\xE7\xF5es dos m\xE9todos update e create do controller de candidaturas."
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+                  children: "Antes de uma candidatura ser salva pela model, foi adicionado o campo 'score', calculado conforme especifica\xE7\xE3o do projeto."
+                })]
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+              children: "No m\xF3dulo de Vagas existe a funcionalidade 'Ver Ranking', que permite visualizar em uma modal as candidaturas para uma determinada vaga ordenadas pelo campo 'score'."
+            })]
           })]
         })
       })
@@ -3544,7 +3566,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 var Home = /*#__PURE__*/function (_React$Component) {
   _inherits(Home, _React$Component);
 
@@ -3572,11 +3593,9 @@ var Home = /*#__PURE__*/function (_React$Component) {
   _createClass(Home, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "home-content",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: "teste Home"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Example__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Example__WEBPACK_IMPORTED_MODULE_2__["default"], {})
       });
     }
   }]);

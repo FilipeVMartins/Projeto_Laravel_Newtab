@@ -23,7 +23,6 @@ export default class Home extends React.Component {
 
     return (
       <div className="home-content">
-        <p>teste Home</p>
         <Example />
       </div>
     );
