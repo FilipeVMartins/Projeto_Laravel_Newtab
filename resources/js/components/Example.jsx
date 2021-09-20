@@ -35,6 +35,7 @@ function Example() {
 
                             <p>No módulo de Vagas existe a funcionalidade 'Ver Ranking', que permite visualizar em uma modal as candidaturas para uma determinada vaga 
                                 ordenadas pelo campo 'score'.</p>
+                            <p>O Projeto tem factories no DatabaseSeeder para as 3 tabelas. 'php artisan db:seed'.</p>
                         </div>
 
                     </div>

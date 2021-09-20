@@ -2313,6 +2313,8 @@ function Example() {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
               children: "No m\xF3dulo de Vagas existe a funcionalidade 'Ver Ranking', que permite visualizar em uma modal as candidaturas para uma determinada vaga ordenadas pelo campo 'score'."
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+              children: "O Projeto tem factories no DatabaseSeeder para as 3 tabelas. 'php artisan db:seed'."
             })]
           })]
         })
