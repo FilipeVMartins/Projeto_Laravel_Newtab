@@ -209,7 +209,7 @@ export default class Candidaturas extends React.Component {
 
      if (e.target.value.length > 1) {
       const nome = encodeURI(e.target.value)
-      const url = 'http://localhost:8001/api/Candidaturas/SelectPessoaOptions?nome='+nome;
+      const url = '/api/Candidaturas/SelectPessoaOptions?nome='+nome;
 
       const requestOptions = {
         method: 'GET',
@@ -229,7 +229,7 @@ export default class Candidaturas extends React.Component {
 
      if (e.target.value.length > 1) {
       const titulo = encodeURI(e.target.value)
-      const url = 'http://localhost:8001/api/Candidaturas/SelectVagaOptions?titulo='+titulo;
+      const url = '/api/Candidaturas/SelectVagaOptions?titulo='+titulo;
 
       const requestOptions = {
         method: 'GET',

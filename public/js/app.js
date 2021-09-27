@@ -2895,7 +2895,7 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "searchCandidatoNome", function (e) {
       if (e.target.value.length > 1) {
         var nome = encodeURI(e.target.value);
-        var url = 'http://localhost:8001/api/Candidaturas/SelectPessoaOptions?nome=' + nome;
+        var url = '/api/Candidaturas/SelectPessoaOptions?nome=' + nome;
         var requestOptions = {
           method: 'GET'
         };
@@ -2918,7 +2918,7 @@ var Candidaturas = /*#__PURE__*/function (_React$Component) {
 
       if (e.target.value.length > 1) {
         var titulo = encodeURI(e.target.value);
-        var url = 'http://localhost:8001/api/Candidaturas/SelectVagaOptions?titulo=' + titulo;
+        var url = '/api/Candidaturas/SelectVagaOptions?titulo=' + titulo;
         var requestOptions = {
           method: 'GET'
         };
