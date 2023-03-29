@@ -16,24 +16,24 @@ $mapaLocalidades = [<br>
     ];<br>
 
 
-The project counts with:
-Four Models: [
-    app/Models/Candidatura.php,
-    app/Models/Pessoa.php,
-    app/Models/User.php,
-    app/Models/Vaga.php
-]
-Four API's: [
-    app/Http/Controllers/API_Candidaturas,
-    app/Http/Controllers/API_Pessoas,
-    app/Http/Controllers/API_Ranking,
-    app/Http/Controllers/API_Vagas,
-]
-Four Pages: [
-    resources/js/pages/Candidaturas.jsx
-    resources/js/pages/Home.jsx 
-    resources/js/pages/Pessoas.jsx
-    resources/js/pages/Vagas.jsx
-]
-The SPA app is served by the View file: [resources/views/index.blade.php]
+The project counts with:<br>
+Four Models: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Models/Candidatura.php,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Models/Pessoa.php,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Models/User.php,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Models/Vaga.php<br>
+]<br>
+Four API's: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Http/Controllers/API_Candidaturas,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Http/Controllers/API_Pessoas,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Http/Controllers/API_Ranking,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    app/Http/Controllers/API_Vagas,<br>
+]<br>
+Four Pages: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    resources/js/pages/Candidaturas.jsx<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    resources/js/pages/Home.jsx <br>
+&nbsp;&nbsp;&nbsp;&nbsp;    resources/js/pages/Pessoas.jsx<br>
+&nbsp;&nbsp;&nbsp;&nbsp;    resources/js/pages/Vagas.jsx<br>
+]<br>
+The SPA app is served by the View file: [resources/views/index.blade.php]<br>
 
